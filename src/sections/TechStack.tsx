@@ -123,7 +123,7 @@ export default function TechStack() {
           className="mt-12 glass rounded-2xl p-6"
         >
           <p className="text-gray-400 text-sm font-mono text-center">
-            Always learning and exploring new technologies 🚀
+            Always learning and exploring new technology
           </p>
         </motion.div>
       </div>

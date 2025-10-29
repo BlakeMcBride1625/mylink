@@ -16,20 +16,21 @@ import {
 import axios from 'axios';
 
 const baseNavItems = [
-  { name: 'Home', path: '/', icon: Home },
+  { name: 'Home', path: '/home', icon: Home },
   { name: 'Projects', path: '/projects', icon: FolderGit2 },
   { name: 'Tech Stack', path: '/tech-stack', icon: Wrench },
   { name: 'Experience', path: '/experience', icon: Briefcase },
   { name: 'Code Viewer', path: '/code-viewer', icon: Code2 },
-  { name: 'Messages', path: '/messages', icon: MessageSquare },
   { name: 'Contact', path: '/contact', icon: Mail },
 ];
 
+const messagesNavItem = { name: 'Messages', path: '/messages', icon: MessageSquare };
 const adminNavItem = { name: 'Admin', path: '/admin', icon: Shield };
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [navItems, setNavItems] = useState(baseNavItems);
 
   useEffect(() => {
@@ -38,19 +39,35 @@ export default function Navigation() {
 
   const checkAdminStatus = async () => {
     try {
-      const response = await axios.get(`http://localhost:${import.meta.env.VITE_BACKEND_PORT || 1600}/auth/user`, {
+      const response = await axios.get('/auth/user', {
         withCredentials: true,
       });
       
       const userId = response.data.user?.profile?.id;
       const adminId = import.meta.env.VITE_ADMIN_DISCORD_ID || '850726663289700373';
       
-      if (userId === adminId) {
-        setIsAdmin(true);
-        setNavItems([...baseNavItems, adminNavItem]);
+      if (userId) {
+        // User is logged in
+        setIsLoggedIn(true);
+        
+        if (userId === adminId) {
+          // Admin user: show base + messages + admin
+          setIsAdmin(true);
+          setNavItems([...baseNavItems.slice(0, 5), messagesNavItem, baseNavItems[5], adminNavItem]);
+        } else {
+          // Regular logged-in user: show base + messages
+          setIsAdmin(false);
+          setNavItems([...baseNavItems.slice(0, 5), messagesNavItem, baseNavItems[5]]);
+        }
+      } else {
+        // Not logged in: show only base items
+        setIsLoggedIn(false);
+        setIsAdmin(false);
+        setNavItems(baseNavItems);
       }
     } catch (error) {
       // User not logged in or error occurred
+      setIsLoggedIn(false);
       setIsAdmin(false);
       setNavItems(baseNavItems);
     }
@@ -85,7 +102,13 @@ export default function Navigation() {
       {/* Mobile Navigation Toggle */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-6 right-6 z-50 glass rounded-xl p-3 text-quantum-glow"
+        style={{
+          position: 'fixed',
+          top: '1rem',
+          right: '1rem',
+          zIndex: 50
+        }}
+        className="lg:hidden glass rounded-xl p-3 text-quantum-glow shadow-lg"
       >
         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
@@ -94,10 +117,18 @@ export default function Navigation() {
       <AnimatePresence>
         {isOpen && (
           <motion.nav
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden fixed top-20 right-6 z-40 glass rounded-2xl p-4 min-w-[200px]"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            style={{ 
+              position: 'fixed',
+              top: '5rem',
+              right: '1rem',
+              width: '16rem',
+              maxWidth: 'calc(100vw - 2rem)',
+              zIndex: 40
+            }}
+            className="lg:hidden glass rounded-2xl p-4 shadow-xl"
           >
             <div className="flex flex-col gap-2">
               {navItems.map((item) => (

@@ -13,11 +13,11 @@ export default function Home() {
   const isIdle = useIdleDetection(60000);
   const uptime = useUptime();
 
-  // Poll APIs every second
-  const lanyard = usePolling(() => fetchLanyardData(DISCORD_USER_ID), 1000);
-  const lastfm = usePolling(() => fetchLastFmData(), 1000);
-  const wakatime = usePolling(() => fetchWakaTimeData(), 1000);
-  const discordProfile = usePolling(() => fetchDiscordProfile(DISCORD_USER_ID), 10000); // Poll every 10 seconds
+  // Poll APIs at reasonable intervals to avoid rate limiting
+  const lanyard = usePolling(() => fetchLanyardData(DISCORD_USER_ID), 5000); // Every 5 seconds
+  const lastfm = usePolling(() => fetchLastFmData(), 10000); // Every 10 seconds
+  const wakatime = usePolling(() => fetchWakaTimeData(), 30000); // Every 30 seconds
+  const discordProfile = usePolling(() => fetchDiscordProfile(DISCORD_USER_ID), 60000); // Every 60 seconds
 
   return (
     <div className="min-h-screen px-4 py-20 lg:px-12 lg:py-24">

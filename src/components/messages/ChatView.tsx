@@ -5,7 +5,7 @@ import axios from 'axios';
 import { formatDistanceToNow } from 'date-fns';
 
 const api = axios.create({
-  baseURL: `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 1600}`,
+  baseURL: '/', // Use relative path to work with Cloudflare tunnel
   withCredentials: true,
 });
 

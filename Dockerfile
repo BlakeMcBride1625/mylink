@@ -1,69 +1,32 @@
-# Multi-stage build for production
+# Production Dockerfile - uses pre-installed node_modules
+# Run these commands BEFORE building:
+# 1. npm run build (frontend)
+# 2. npm run build:backend (backend)
+# 3. Make sure node_modules exists locally
 
-# Stage 1: Build frontend
-FROM node:20-alpine AS frontend-builder
+FROM node:20-slim
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source files
-COPY . .
-
-# Build frontend
-RUN npm run build
-
-# Stage 2: Backend runtime
-FROM node:20-alpine AS backend-builder
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci --only=production
-
-# Copy server files
+# Copy everything (node_modules will come from host)
+COPY package.json package-lock.json ./
+COPY node_modules ./node_modules
+COPY dist ./dist
 COPY server ./server
-COPY tsconfig.json ./
+COPY public ./public
 
-# Stage 3: Production runtime
-FROM node:20-alpine
-WORKDIR /app
-
-# Install production dependencies
-COPY package*.json ./
-RUN npm ci --only=production
-
-# Copy built frontend from frontend-builder
-COPY --from=frontend-builder /app/dist ./dist
-
-# Copy backend files
-COPY --from=backend-builder /app/node_modules ./node_modules
-COPY server ./server
-COPY tsconfig.json ./
+# Remove "type": "module" from package.json for CommonJS backend
+RUN sed -i '/"type": "module"/d' package.json
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
-
-# Change ownership
-RUN chown -R nodejs:nodejs /app
-
-# Switch to non-root user
+RUN groupadd -g 1001 nodejs && useradd -r -u 1001 -g nodejs nodejs && chown -R nodejs:nodejs /app
 USER nodejs
 
 # Expose ports
 EXPOSE 1500 1600
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:1600/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:${BACKEND_PORT:-1600}/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)}).on('error', () => process.exit(1))"
 
-# Start application (production mode)
-CMD ["npm", "start"]
-
-
+# Start backend
+CMD ["node", "server/index.js"]

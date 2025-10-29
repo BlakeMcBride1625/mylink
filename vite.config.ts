@@ -12,11 +12,17 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
-    // Base URL for production deployment at /myhub/ subdirectory
-    base: mode === 'production' ? '/myhub/' : '/',
+    // Base URL - using /myhub/ path for all pages
+    base: '/myhub/',
     server: {
       host: true, // Expose to network for testing real IPs
       port: parseInt(env.FRONTEND_PORT || '1500'),
+      allowedHosts: [
+        'localhost',
+        'developer.epildevconnect.uk',
+        '.epildevconnect.uk', // Allow all subdomains
+      ],
+      hmr: false, // Disable HMR for public access through Cloudflare Tunnel
       proxy: {
         '/api': {
           target: `http://localhost:${env.BACKEND_PORT || '1600'}`,

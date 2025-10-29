@@ -48,22 +48,46 @@ const socialLinks = [
 
 export default function SocialLinks() {
   return (
-    <div className="fixed bottom-8 left-8 z-50 hidden lg:block">
-      <div className="flex flex-col gap-4 glass rounded-2xl p-4 glow-box">
-        {socialLinks.map((social) => (
-          <a
-            key={social.name}
-            href={social.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`p-3 rounded-xl transition-all duration-300 text-gray-400 hover:bg-white hover:bg-opacity-5 ${social.color}`}
-            aria-label={social.name}
-          >
-            <social.icon className="w-5 h-5" />
-          </a>
-        ))}
+    <>
+      {/* Desktop Social Links - Left Side */}
+      <div className="fixed bottom-8 left-8 z-50 hidden lg:block">
+        <div className="flex flex-col gap-4 glass rounded-2xl p-4 glow-box">
+          {socialLinks.map((social) => (
+            <a
+              key={social.name}
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`p-3 rounded-xl transition-all duration-300 text-gray-400 hover:bg-white hover:bg-opacity-5 ${social.color}`}
+              aria-label={social.name}
+            >
+              <social.icon className="w-5 h-5" />
+            </a>
+          ))}
+        </div>
       </div>
-    </div>
+
+      {/* Mobile Social Links - Bottom */}
+      <div 
+        style={{ left: '50%', transform: 'translateX(-50%)' }}
+        className="fixed bottom-6 z-40 lg:hidden"
+      >
+        <div className="flex justify-center gap-2 glass rounded-2xl p-3 shadow-xl mx-auto">
+          {socialLinks.map((social) => (
+            <a
+              key={social.name}
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`p-2.5 rounded-xl transition-all duration-300 text-gray-400 hover:bg-white hover:bg-opacity-5 ${social.color}`}
+              aria-label={social.name}
+            >
+              <social.icon className="w-4 h-4" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 

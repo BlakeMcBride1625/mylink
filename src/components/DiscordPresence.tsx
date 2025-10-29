@@ -49,7 +49,7 @@ const badgeInfo: Record<string, { name: string; icon: string; useLocal?: boolean
   nitro_gold: { name: 'Nitro', icon: '/badges/nitro-gold.svg', useLocal: true },
   premium_guild_subscriber: { name: 'Server Booster', icon: '/badges/serverboost1.svg', useLocal: true },
   quest_completed: { name: 'Completed A Quest', icon: '/badges/quest.png', useLocal: true },
-  apprentice: { name: 'Apprentice', icon: '/badges/apprentice.svg', useLocal: true },
+  apprentice: { name: 'Apprentice', icon: '/badges/OrbsApprentice.webp', useLocal: true },
 };
 
 export default function DiscordPresence({
@@ -89,13 +89,13 @@ export default function DiscordPresence({
   const presence = data.data;
   const activities = presence.activities || [];
   const spotify = activities.find((a: any) => a.type === 2);
-  const customStatus = activities.find((a: any) => a.type === 4);
 
   const statusIcons = {
     online: '/status-icons/online.png',
     idle: '/status-icons/idle.png',
     dnd: '/status-icons/dnd.png',
-    offline: '/status-icons/online.png', // fallback to online icon for offline
+    offline: '/status-icons/invisible-offline.png',
+    invisible: '/status-icons/invisible-offline.png',
   };
 
   return (

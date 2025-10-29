@@ -14,20 +14,27 @@ dotenv.config();
 const app = express();
 const PORT = process.env.BACKEND_PORT || 1600;
 
+// Trust proxy - Required for Cloudflare Tunnel
+app.set('trust proxy', true);
+
 // Middleware
 app.use(cors({
-  origin: `http://localhost:${process.env.FRONTEND_PORT || 1500}`,
+  origin: [
+    `http://localhost:${process.env.FRONTEND_PORT || 1500}`,
+    'https://developer.epildevconnect.uk'
+  ],
   credentials: true,
 }));
 app.use(express.json());
 
-// Rate limiting
+// Rate limiting (configured for Cloudflare Tunnel)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per window
+  max: 500, // Limit each IP to 500 requests per window (increased for dashboard polling)
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false }, // Disable validation since we're behind Cloudflare
 });
 
 const authLimiter = rateLimit({
@@ -36,6 +43,7 @@ const authLimiter = rateLimit({
   message: 'Too many login attempts, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false },
 });
 
 const messageLimiter = rateLimit({
@@ -44,6 +52,7 @@ const messageLimiter = rateLimit({
   message: 'Too many messages sent, please slow down.',
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false },
 });
 
 app.use('/api/', limiter);
@@ -53,8 +62,13 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'myhub-secret-key',
   resave: false,
   saveUninitialized: false,
+  proxy: true, // Trust proxy for session cookies
   cookie: {
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    secure: false, // Set to false since tunnel handles HTTPS
+    httpOnly: true,
+    sameSite: 'lax',
+    path: '/',
   },
 }));
 app.use(passport.initialize());
@@ -91,57 +105,98 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Auth Routes
-app.get('/auth/discord', passport.authenticate('discord'));
-
-app.get('/auth/callback',
-  passport.authenticate('discord', { failureRedirect: '/messages' }),
-  async (req, res) => {
-    try {
-      const user = (req.user as any)?.profile;
-      if (user) {
-        const userId = user.id;
-        const userName = user.username || user.global_name || 'Unknown';
-        const userAvatar = user.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png` : null;
-        
-        // Get user's IP address
-        const ipAddress = (req.headers['x-forwarded-for'] as string)?.split(',')[0] || 
-                         req.socket.remoteAddress || 
-                         'Unknown';
-        
-        // Log user login
-        await logUserLogin(userId, userName, userAvatar, ipAddress);
-        
-        // Check if user is blocked
-        const blocked = await isUserBlocked(userId);
-        if (blocked) {
-          req.logout(() => {
-            res.redirect('/?error=blocked');
-          });
-          return;
-        }
+// Auth Routes (supporting both /auth and /myhub/auth paths)
+const authCallbackHandler = async (req: any, res: any) => {
+  try {
+    const user = (req.user as any)?.profile;
+    if (user) {
+      const userId = user.id;
+      const userName = user.username || user.global_name || 'Unknown';
+      const userAvatar = user.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png` : null;
+      
+      // Get user's IP address
+      const ipAddress = (req.headers['x-forwarded-for'] as string)?.split(',')[0] || 
+                       req.socket.remoteAddress || 
+                       'Unknown';
+      
+      // Log user login
+      await logUserLogin(userId, userName, userAvatar, ipAddress);
+      
+      // Check if user is blocked
+      const blocked = await isUserBlocked(userId);
+      if (blocked) {
+        req.logout(() => {
+          res.redirect('https://developer.epildevconnect.uk/myhub/?error=blocked');
+        });
+        return;
       }
-      res.redirect('/messages');
-    } catch (error) {
-      console.error('Error in auth callback:', error);
-      res.redirect('/messages');
     }
+    
+    // Save session before redirect to ensure it's persisted
+    req.session.save((err: any) => {
+      if (err) {
+        console.error('Session save error:', err);
+      }
+      res.redirect('https://developer.epildevconnect.uk/myhub/messages');
+    });
+  } catch (error) {
+    console.error('Error in auth callback:', error);
+    res.redirect('https://developer.epildevconnect.uk/myhub/messages');
+  }
+};
+
+// Register routes for both /auth and /myhub/auth paths
+app.get('/auth/discord', (req, res, next) => {
+  console.log('[Auth] Initiating Discord OAuth flow');
+  passport.authenticate('discord')(req, res, next);
+});
+app.get('/myhub/auth/discord', (req, res, next) => {
+  console.log('[Auth] Initiating Discord OAuth flow (myhub path)');
+  passport.authenticate('discord')(req, res, next);
+});
+
+app.get('/auth/callback', 
+  passport.authenticate('discord', { failureRedirect: 'https://developer.epildevconnect.uk/' }),
+  (req, res, next) => {
+    console.log('[Auth] Discord callback received, user:', (req.user as any)?.profile?.username);
+    console.log('[Auth] Session ID:', req.sessionID);
+    console.log('[Auth] Is Authenticated:', req.isAuthenticated());
+    authCallbackHandler(req, res);
+  }
+);
+app.get('/myhub/auth/callback',
+  passport.authenticate('discord', { failureRedirect: 'https://developer.epildevconnect.uk/' }),
+  (req, res, next) => {
+    console.log('[Auth] Discord callback received (myhub path), user:', (req.user as any)?.profile?.username);
+    console.log('[Auth] Session ID:', req.sessionID);
+    console.log('[Auth] Is Authenticated:', req.isAuthenticated());
+    authCallbackHandler(req, res);
   }
 );
 
-app.get('/auth/user', (req, res) => {
+const authUserHandler = (req: any, res: any) => {
+  console.log('[Auth] /auth/user request - Session ID:', req.sessionID);
+  console.log('[Auth] Is Authenticated:', req.isAuthenticated());
+  console.log('[Auth] User:', req.user ? (req.user as any)?.profile?.username : 'null');
+  
   if (req.isAuthenticated()) {
     res.json({ user: req.user });
   } else {
     res.json({ user: null });
   }
-});
+};
 
-app.post('/auth/logout', (req, res) => {
+const logoutHandler = (req: any, res: any) => {
   req.logout(() => {
     res.json({ success: true });
   });
-});
+};
+
+app.get('/auth/user', authUserHandler);
+app.get('/myhub/auth/user', authUserHandler);
+
+app.post('/auth/logout', logoutHandler);
+app.post('/myhub/auth/logout', logoutHandler);
 
 // Middleware to check if user is admin
 const isAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -832,6 +887,19 @@ app.get('/health', (req, res) => {
 });
 
 // Global error handler (must be last)
+// Serve static frontend files at /myhub path
+app.use('/myhub', express.static('dist'));
+
+// Handle client-side routing - send index.html for /myhub routes
+app.get('/myhub/*', (req, res) => {
+  res.sendFile('index.html', { root: 'dist' });
+});
+
+// Redirect root to /myhub/home
+app.get('/', (req, res) => {
+  res.redirect('/myhub/home');
+});
+
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Global error handler:', err);
   

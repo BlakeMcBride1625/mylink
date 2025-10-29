@@ -6,7 +6,7 @@ import ChatView from '../components/messages/ChatView';
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 1600}`,
+  baseURL: '/', // Use relative path to work with Cloudflare tunnel
   withCredentials: true,
 });
 
@@ -28,6 +28,7 @@ export default function Messages() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isCreatingConversation, setIsCreatingConversation] = useState(false);
 
   // Check authentication
   useEffect(() => {
@@ -51,11 +52,11 @@ export default function Messages() {
         setUser(response.data.user);
       } else {
         // Redirect to Discord login
-        window.location.href = `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 1600}/auth/discord`;
+        window.location.href = '/auth/discord';
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      window.location.href = `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 1600}/auth/discord`;
+      window.location.href = '/auth/discord';
     } finally {
       setIsLoading(false);
     }
@@ -105,6 +106,21 @@ export default function Messages() {
     }
   };
 
+  const handleCreateConversation = async () => {
+    try {
+      setIsCreatingConversation(true);
+      const response = await api.post('/api/conversations');
+      const newConversation = response.data.conversation;
+      setConversations([newConversation, ...conversations]);
+      setSelectedConversation(newConversation);
+    } catch (error) {
+      console.error('Failed to create conversation:', error);
+      alert('Failed to start a new conversation. Please try again.');
+    } finally {
+      setIsCreatingConversation(false);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await api.post('/auth/logout');
@@ -126,8 +142,8 @@ export default function Messages() {
   }
 
   return (
-    <div className="min-h-screen px-4 py-20 lg:px-12 lg:py-24">
-      <div className="max-w-7xl mx-auto h-[calc(100vh-12rem)]">
+    <div className="min-h-screen px-4 py-20 lg:px-12 lg:py-24 pb-32">
+      <div className="max-w-7xl mx-auto h-[calc(100vh-16rem)]">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -166,12 +182,41 @@ export default function Messages() {
         >
           {/* Conversation List Sidebar - Hidden on mobile when chat is open */}
           <div className={`${selectedConversation ? 'hidden lg:flex' : 'flex'} flex-col w-full lg:w-auto h-full`}>
-            <ConversationList
-              conversations={conversations}
-              selectedConversation={selectedConversation}
-              onSelectConversation={handleSelectConversation}
-              isAdmin={isAdmin}
-            />
+            {!isAdmin && conversations.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+                <MessageSquare className="w-16 h-16 text-quantum-glow opacity-50 mb-4" />
+                <h3 className="text-xl font-mono text-gray-300 mb-2">No conversations yet</h3>
+                <p className="text-sm text-gray-400 mb-6 max-w-xs">
+                  Start a conversation with @epildev
+                </p>
+                <motion.button
+                  onClick={handleCreateConversation}
+                  disabled={isCreatingConversation}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-3 rounded-xl bg-quantum-glow text-dark-900 font-mono font-semibold hover:bg-opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isCreatingConversation ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <MessageSquare className="w-5 h-5" />
+                      Start Conversation
+                    </>
+                  )}
+                </motion.button>
+              </div>
+            ) : (
+              <ConversationList
+                conversations={conversations}
+                selectedConversation={selectedConversation}
+                onSelectConversation={handleSelectConversation}
+                isAdmin={isAdmin}
+              />
+            )}
           </div>
 
           {/* Chat View - Shows on mobile only when conversation selected */}

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { formatDistanceToNow } from 'date-fns';
 
 const api = axios.create({
-  baseURL: `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 1600}`,
+  baseURL: '/', // Use relative path to work with Cloudflare tunnel
   withCredentials: true,
 });
 
@@ -37,7 +37,7 @@ export default function AdminDashboard() {
       const authResponse = await api.get('/auth/user');
       if (!authResponse.data.user) {
         // Redirect to Discord login
-        window.location.href = `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 1600}/auth/discord`;
+        window.location.href = '/auth/discord';
         return;
       }
 
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
         setError('Access Denied: Admin privileges required');
         setIsAdmin(false);
       } else if (error.response?.status === 401) {
-        window.location.href = `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 1600}/auth/discord`;
+        window.location.href = '/auth/discord';
       } else {
         setError('Failed to load admin dashboard');
       }

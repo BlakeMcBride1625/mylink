@@ -1,12 +1,12 @@
-# Dependencies
-node_modules
+# Dependencies (commented out - we need to copy node_modules for production)
+# node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Build outputs
-dist
+# Build outputs (commented out - we need dist and server/*.js for production build)
+# dist
 build
 .vite
 

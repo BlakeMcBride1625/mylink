@@ -17,7 +17,7 @@ services:
     networks:
       - myhub-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-myhub_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -29,14 +29,12 @@ services:
       dockerfile: Dockerfile
     container_name: myhub-app
     restart: unless-stopped
+    network_mode: "host"
     depends_on:
       postgres:
         condition: service_healthy
     env_file:
       - .env
-    ports:
-      - "${FRONTEND_PORT:-1500}:${FRONTEND_PORT:-1500}"
-      - "${BACKEND_PORT:-1600}:${BACKEND_PORT:-1600}"
     environment:
       - NODE_ENV=production
       - FRONTEND_PORT=${FRONTEND_PORT:-1500}
@@ -55,13 +53,11 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
       - SESSION_SECRET=${SESSION_SECRET}
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=localhost
+      - POSTGRES_PORT=1800
       - POSTGRES_USER=${POSTGRES_USER:-admin}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB:-myhub_db}
-    networks:
-      - myhub-network
     healthcheck:
       test: [ "CMD", "node", "-e", "require('http').get('http://localhost:1600/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
       interval: 30s

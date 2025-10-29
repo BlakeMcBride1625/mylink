@@ -1,225 +1,315 @@
-# 📚 MY HUB Documentation
+# 🚀 MY HUB
 
-Complete documentation for MY HUB - your futuristic personal dashboard.
+> A real-time, futuristic personal dashboard showcasing live presence, projects, and communication channels.
 
----
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-## 🚀 Getting Started
-
-New to MY HUB? Start here:
-
-| Guide                                     | Description                  |
-| ----------------------------------------- | ---------------------------- |
-| **[Quick Start](QUICKSTART.md)**          | 5-minute setup guide         |
-| **[Start Here](START_HERE.md)**           | First-time setup walkthrough |
-| **[Setup Guide](SETUP.md)**               | Detailed API configuration   |
-| **[Project Summary](PROJECT_SUMMARY.md)** | Complete feature overview    |
+![MY HUB Screenshot](https://via.placeholder.com/800x400/0a0a0f/00d9ff?text=MY+HUB+Dashboard)
 
 ---
 
-## 📖 User Guides
+## ✨ Features
 
-### Security & Admin
+### 🎯 Real-Time Dashboard
 
-| Guide                                                | Description                       |
-| ---------------------------------------------------- | --------------------------------- |
-| **[Admin Setup](guides/ADMIN_SETUP.md)**             | Enable admin dashboard navigation |
-| **[Security Features](guides/SECURITY_FEATURES.md)** | Complete security documentation   |
+- **Discord Presence** - Live status via Lanyard API
+- **Now Playing** - Real-time music from Last.fm
+- **Coding Activity** - Live stats from WakaTime
+- **System Uptime** - Session tracking
 
-### Discord Integration
+### 💬 Discord DM System
 
-| Guide                                                | Description                    |
-| ---------------------------------------------------- | ------------------------------ |
-| **[Discord Bot Setup](guides/DISCORD_BOT_SETUP.md)** | Configure Discord API access   |
-| **[Discord DM System](guides/DISCORD_DM_SETUP.md)**  | Set up messaging system        |
-| **[Badge Auto-Update](guides/BADGE-AUTO-UPDATE.md)** | Automated Discord badge system |
-| **[Badge Updates](BADGE-UPDATES.md)**                | Manual badge update process    |
+- Full messaging interface
+- Admin dashboard for conversation management
+- PostgreSQL-backed persistence
+- Real-time message updates
 
-### Mobile & Responsive
+### 🔒 Security Features
 
-| Guide                                                | Description               |
-| ---------------------------------------------------- | ------------------------- |
-| **[Mobile Responsive](guides/MOBILE_RESPONSIVE.md)** | Mobile optimization guide |
+- IP address logging
+- 3-tier rate limiting
+- User blocking system
+- Admin-only dashboard
+- Privacy Policy & Terms of Service
 
----
+### 📱 Mobile Responsive
 
-## 🛠️ Technical Documentation
+- Optimised for all screen sizes
+- Touch-friendly interface
+- Adaptive layouts
+- Native mobile feel
 
-### Architecture & Deployment
+### 🎨 Modern UI/UX
 
-| Guide                               | Description                 |
-| ----------------------------------- | --------------------------- |
-| **[Architecture](ARCHITECTURE.md)** | System design overview      |
-| **[API Reference](API.md)**         | Complete API documentation  |
-| **[Deployment](DEPLOYMENT.md)**     | Production deployment guide |
-
----
-
-## 👨‍💻 Development
-
-### For Contributors
-
-| Guide                                  | Description             |
-| -------------------------------------- | ----------------------- |
-| **[Contributing](../CONTRIBUTING.md)** | Contribution guidelines |
-| **[Changelog](../CHANGELOG.md)**       | Version history         |
-
-### Internal Development Docs
-
-| File                                                      | Description               |
-| --------------------------------------------------------- | ------------------------- |
-| **[Fixes Applied](development/FIXES_APPLIED.md)**         | Historical bug fixes      |
-| **[Project Checklist](development/PROJECT_CHECKLIST.md)** | Feature completion status |
-| **[Final Status](development/FINAL_STATUS.txt)**          | Latest project status     |
+- Glassmorphism design
+- Particle background (WebGL)
+- Smooth Framer Motion animations
+- Dark mode only (futuristic aesthetic)
 
 ---
 
-## 📋 Quick Reference
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL 14+
+- Discord Application (for OAuth)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/myhub.git
+cd myhub
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your API keys
+
+# Initialize database
+npm run setup
+
+# Start development servers
+npm run dev
+```
+
+Visit: **http://localhost:1500**
+
+---
+
+## 📖 Documentation
+
+### Getting Started
+
+- **[Quick Start Guide](docs/QUICKSTART.md)** - 5-minute setup
+- **[Start Here](docs/START_HERE.md)** - First-time setup walkthrough
+- **[Setup Guide](docs/SETUP.md)** - Detailed API configuration
+
+### Guides
+
+- **[Admin Setup](docs/guides/ADMIN_SETUP.md)** - Enable admin navigation
+- **[Discord Bot Setup](docs/guides/DISCORD_BOT_SETUP.md)** - Configure Discord API
+- **[Discord DM System](docs/guides/DISCORD_DM_SETUP.md)** - Set up messaging
+- **[Security Features](docs/guides/SECURITY_FEATURES.md)** - Security documentation
+- **[Badge Auto-Update](docs/guides/BADGE-AUTO-UPDATE.md)** - Automated badge system
+- **[Mobile Responsive](docs/guides/MOBILE_RESPONSIVE.md)** - Mobile optimization guide
+
+### Technical
+
+- **[API Reference](docs/API.md)** - Complete API documentation
+- **[Architecture](docs/ARCHITECTURE.md)** - System design overview
+- **[Deployment](docs/DEPLOYMENT.md)** - Production deployment guide
+- **[Project Summary](docs/PROJECT_SUMMARY.md)** - Complete feature list
+
+### Development
+
+- **[Contributing](CONTRIBUTING.md)** - Contribution guidelines
+- **[Changelog](CHANGELOG.md)** - Version history
+
+---
+
+## 🛠️ Tech Stack
+
+| Category           | Technologies                                   |
+| ------------------ | ---------------------------------------------- |
+| **Frontend**       | React, TypeScript, Tailwind CSS, Framer Motion |
+| **Backend**        | Node.js, Express, TypeScript                   |
+| **Database**       | PostgreSQL                                     |
+| **Authentication** | Discord OAuth2, Passport.js                    |
+| **APIs**           | Lanyard, Last.fm, WakaTime, Discord            |
+| **Build Tools**    | Vite, ESLint, Prettier                         |
+| **Deployment**     | Docker, Docker Compose, Cloudflare             |
+
+---
+
+## 📁 Project Structure
+
+```
+myhub/
+├── src/
+│   ├── components/      # React components
+│   ├── sections/        # Page sections
+│   ├── utils/          # Utilities & hooks
+│   └── main.tsx        # Entry point
+├── server/
+│   ├── index.ts        # Express server
+│   └── db.ts           # Database logic
+├── docs/               # Documentation
+│   ├── guides/         # User guides
+│   └── development/    # Dev docs
+├── public/             # Static assets
+└── scripts/            # Build & utility scripts
+```
+
+---
+
+## 🔧 Configuration
 
 ### Environment Variables
 
+Create a `.env` file with the following:
+
 ```env
-# Required
-DISCORD_USER_ID=your_id
-DISCORD_CLIENT_ID=client_id
-DISCORD_CLIENT_SECRET=client_secret
-LASTFM_API_KEY=api_key
-WAKATIME_API_KEY=api_key
-POSTGRES_PASSWORD=password
-SESSION_SECRET=secret
+# Server Ports
+FRONTEND_PORT=1500
+BACKEND_PORT=1600
 
-# Optional
-DISCORD_BOT_TOKEN=bot_token
-ADMIN_DISCORD_ID=admin_id
-```
+# Discord
+DISCORD_USER_ID=your_discord_id
+DISCORD_CLIENT_ID=your_client_id
+DISCORD_CLIENT_SECRET=your_client_secret
+DISCORD_REDIRECT_URI=http://localhost:1500/auth/callback
+DISCORD_BOT_TOKEN=your_bot_token
+ADMIN_DISCORD_ID=your_admin_id
+VITE_DISCORD_USER_ID=your_discord_id
+VITE_ADMIN_DISCORD_ID=your_admin_id
 
-### Common Commands
+# Last.fm
+LASTFM_USERNAME=your_username
+LASTFM_API_KEY=your_api_key
 
-```bash
-# Development
-npm run dev              # Start dev servers
-npm run type-check       # Check TypeScript
-npm run build            # Build for production
+# WakaTime
+WAKATIME_USERNAME=your_username
+WAKATIME_API_KEY=your_api_key
+
+# Email (Nodemailer)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
 
 # Database
-npm run setup            # Initialize database
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=myhub
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=your_password
 
-# Utilities
-npm run check-env        # Validate environment
-npm run generate-secret  # Generate session secret
-```
-
-### Directory Structure
-
-```
-docs/
-├── README.md              # This file
-├── QUICKSTART.md          # 5-min setup
-├── START_HERE.md          # First-time guide
-├── SETUP.md               # API setup
-├── PROJECT_SUMMARY.md     # Feature list
-├── API.md                 # API reference
-├── ARCHITECTURE.md        # System design
-├── DEPLOYMENT.md          # Deployment guide
-├── BADGE-UPDATES.md       # Badge updates
-├── guides/                # User guides
-│   ├── ADMIN_SETUP.md
-│   ├── SECURITY_FEATURES.md
-│   ├── DISCORD_BOT_SETUP.md
-│   ├── DISCORD_DM_SETUP.md
-│   ├── BADGE-AUTO-UPDATE.md
-│   └── MOBILE_RESPONSIVE.md
-└── development/           # Dev docs
-    ├── FIXES_APPLIED.md
-    ├── PROJECT_CHECKLIST.md
-    └── FINAL_STATUS.txt
+# Session
+SESSION_SECRET=your_generated_secret
 ```
 
 ---
 
-## 🎯 Documentation by Topic
+## 🎯 Key Features
 
-### 🔐 Security
+### Admin Dashboard
 
-- [Security Features Guide](guides/SECURITY_FEATURES.md)
-- [Admin Setup](guides/ADMIN_SETUP.md)
-- [API Reference - Security Endpoints](API.md)
+- View all registered users
+- Track IP addresses
+- Block/unblock users
+- Delete users and data
+- Manage conversations
 
-### 💬 Messaging
+### Messaging System
 
-- [Discord DM System Setup](guides/DISCORD_DM_SETUP.md)
-- [Discord Bot Setup](guides/DISCORD_BOT_SETUP.md)
-- [API Reference - Messages](API.md)
+- Discord-like interface
+- Real-time updates
+- Admin sees all conversations
+- Users see only their own
+- Close/reopen/delete conversations
 
-### 📱 Mobile
+### Security
 
-- [Mobile Responsive Guide](guides/MOBILE_RESPONSIVE.md)
-- [Architecture - Responsive Design](ARCHITECTURE.md)
-
-### 🚀 Deployment
-
-- [Deployment Guide](DEPLOYMENT.md)
-- [Architecture Overview](ARCHITECTURE.md)
-- [API Reference](API.md)
-
-### 🎨 Customization
-
-- [Setup Guide - Personalization](SETUP.md)
-- [Project Summary - Features](PROJECT_SUMMARY.md)
+- Rate limiting (API, Auth, Messages)
+- IP logging on all logins
+- User blocking system
+- Automatic session management
+- Protected admin endpoints
 
 ---
 
-## 🆘 Getting Help
+## 📱 Browser Support
 
-### Common Issues
-
-**"I can't see the admin link"**
-→ See [Admin Setup Guide](guides/ADMIN_SETUP.md)
-
-**"Discord presence not showing"**
-→ Check [Setup Guide](SETUP.md) - Discord section
-
-**"WakaTime not updating"**
-→ Enable public profile on WakaTime website
-
-**"Messages not working"**
-→ See [Discord DM Setup](guides/DISCORD_DM_SETUP.md)
-
-**"Mobile layout broken"**
-→ Check [Mobile Responsive Guide](guides/MOBILE_RESPONSIVE.md)
-
-### Support Channels
-
-1. **Documentation** - You're here! 📚
-2. **Issues** - Open a GitHub issue
-3. **Contact** - Use the contact form on the site
+| Browser | Desktop | Mobile  |
+| ------- | ------- | ------- |
+| Chrome  | ✅ Full | ✅ Full |
+| Firefox | ✅ Full | ✅ Full |
+| Safari  | ✅ Full | ✅ Full |
+| Edge    | ✅ Full | ✅ Full |
 
 ---
 
-## 📝 Documentation Status
+## 🚀 Deployment
 
-| Section         | Status      | Last Updated |
-| --------------- | ----------- | ------------ |
-| Getting Started | ✅ Complete | Current      |
-| User Guides     | ✅ Complete | Current      |
-| Technical Docs  | ✅ Complete | Current      |
-| API Reference   | ✅ Complete | Current      |
-| Development     | ✅ Complete | Current      |
+### Development
+
+```bash
+npm run dev
+```
+
+### Production
+
+```bash
+# Build frontend
+npm run build
+
+# Start production server
+npm run preview
+
+# Or use Docker
+docker-compose up -d
+```
+
+See **[Deployment Guide](docs/DEPLOYMENT.md)** for detailed instructions.
 
 ---
 
-## 🤝 Contributing to Docs
+## 🤝 Contributing
 
-Found a typo or want to improve the documentation?
+Contributions are welcome! Please read our **[Contributing Guidelines](CONTRIBUTING.md)** first.
 
-1. Edit the relevant `.md` file
-2. Submit a pull request
-3. Follow the [Contributing Guidelines](../CONTRIBUTING.md)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the **[LICENSE](LICENSE)** file for details.
+
+---
+
+## 👤 Author
+
+**Blake (@epildev)**
+
+- Discord: [850726663289700373](https://discord.com/users/850726663289700373)
+- GitHub: [@BlakeMcBride1625](https://github.com/BlakeMcBride1625)
+
+---
+
+## 🙏 Acknowledgements
+
+- [Lanyard API](https://github.com/Phineas/lanyard) - Discord presence
+- [Last.fm API](https://www.last.fm/api) - Music tracking
+- [WakaTime API](https://wakatime.com/developers) - Coding stats
+- [Discord API](https://discord.com/developers/docs) - OAuth & badges
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Framer Motion](https://www.framer.com/motion/) - Animations
+
+---
+
+## 📞 Support
+
+Need help? Check the **[Documentation](docs/)** or open an issue.
 
 ---
 
 <div align="center">
 
-**[Back to Main README](../README.md)** • **[Quick Start](QUICKSTART.md)** • **[Setup Guide](SETUP.md)**
+**[Website](http://localhost:1500)** • **[Documentation](docs/)** • **[Report Bug](https://github.com/yourusername/myhub/issues)** • **[Request Feature](https://github.com/yourusername/myhub/issues)**
+
+Made with 💙 by Blake
 
 </div>

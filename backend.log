@@ -1,6 +1,0 @@
-
-> myhub@1.0.0 dev:backend
-> tsx watch server/index.ts
-
-🚀 Backend server running on port 1600
-📡 API endpoints available at http://localhost:1600/api
