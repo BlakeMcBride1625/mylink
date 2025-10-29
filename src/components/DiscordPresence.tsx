@@ -38,18 +38,18 @@ const badgeInfo: Record<string, { name: string; icon: string; useLocal?: boolean
   partner: { name: 'Partnered Server Owner', icon: '3f9748e53446a137a052f3454e2de41e' },
   hypesquad: { name: 'HypeSquad Events', icon: 'bf01d1073931f921909045f3a39fd264' },
   bug_hunter_level_1: { name: 'Bug Hunter', icon: '2717692c7dca7289b35297368a940dd0' },
-  hypesquad_online_house_1: { name: 'HypeSquad Bravery', icon: '/badges/hypesquadbravery.svg', useLocal: true },
+  hypesquad_online_house_1: { name: 'HypeSquad Bravery', icon: `${import.meta.env.BASE_URL}badges/hypesquadbravery.svg`, useLocal: true },
   hypesquad_online_house_2: { name: 'HypeSquad Brilliance', icon: '011940fd013da3f7fb926e4a1cd2e618' },
   hypesquad_online_house_3: { name: 'HypeSquad Balance', icon: '3aa41de486fa12454c3761e8e223442e' },
   premium_early_supporter: { name: 'Early Supporter', icon: '7060786766c9c840eb3019e725d2b358' },
   bug_hunter_level_2: { name: 'Bug Hunter Level 2', icon: '848f79194d4be5ff5f81505cbd0ce1e6' },
   verified_developer: { name: 'Early Verified Bot Developer', icon: '6bdc42827a38498929a4920da12695d9' },
   certified_moderator: { name: 'Moderator Programs Alumni', icon: 'fee1624003e2fee35cb398e125dc479b' },
-  active_developer: { name: 'Active Developer', icon: '/badges/activedeveloper.svg', useLocal: true },
-  nitro_gold: { name: 'Nitro', icon: '/badges/nitro-gold.svg', useLocal: true },
-  premium_guild_subscriber: { name: 'Server Booster', icon: '/badges/serverboost1.svg', useLocal: true },
-  quest_completed: { name: 'Completed A Quest', icon: '/badges/quest.png', useLocal: true },
-  apprentice: { name: 'Apprentice', icon: '/badges/OrbsApprentice.webp', useLocal: true },
+  active_developer: { name: 'Active Developer', icon: `${import.meta.env.BASE_URL}badges/activedeveloper.svg`, useLocal: true },
+  nitro_gold: { name: 'Nitro', icon: `${import.meta.env.BASE_URL}badges/nitro-gold.svg`, useLocal: true },
+  premium_guild_subscriber: { name: 'Server Booster', icon: `${import.meta.env.BASE_URL}badges/serverboost1.svg`, useLocal: true },
+  quest_completed: { name: 'Completed A Quest', icon: `${import.meta.env.BASE_URL}badges/quest.png`, useLocal: true },
+  apprentice: { name: 'Apprentice', icon: `${import.meta.env.BASE_URL}badges/OrbsApprentice.webp`, useLocal: true },
 };
 
 export default function DiscordPresence({
@@ -91,11 +91,11 @@ export default function DiscordPresence({
   const spotify = activities.find((a: any) => a.type === 2);
 
   const statusIcons = {
-    online: '/status-icons/online.png',
-    idle: '/status-icons/idle.png',
-    dnd: '/status-icons/dnd.png',
-    offline: '/status-icons/invisible-offline.png',
-    invisible: '/status-icons/invisible-offline.png',
+    online: `${import.meta.env.BASE_URL}status-icons/online.png`,
+    idle: `${import.meta.env.BASE_URL}status-icons/idle.png`,
+    dnd: `${import.meta.env.BASE_URL}status-icons/dnd.png`,
+    offline: `${import.meta.env.BASE_URL}status-icons/invisible-offline.png`,
+    invisible: `${import.meta.env.BASE_URL}status-icons/invisible-offline.png`,
   };
 
   return (
