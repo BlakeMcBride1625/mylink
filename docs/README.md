@@ -282,10 +282,20 @@ This project is licensed under the MIT License - see the **[LICENSE](LICENSE)** 
 
 ## 👤 Author
 
-**Blake (@epildev)**
+**Blake (@epildev)** - EpilDevConnect
 
-- Discord: [850726663289700373](https://discord.com/users/850726663289700373)
-- GitHub: [@BlakeMcBride1625](https://github.com/BlakeMcBride1625)
+### 📬 Contact
+- **Discord**: epildev (850726663289700373)
+- **Email**: [connectwithme@epildevconnect.uk](mailto:connectwithme@epildevconnect.uk)
+- **GitHub**: [@BlakeMcBride1625](https://github.com/BlakeMcBride1625)
+- **Website**: [epildevconnect.uk](https://epildevconnect.uk)
+
+### 🌐 Connect with Me
+- **Twitter/X**: [@epildev_ad](https://x.com/epildev_ad)
+- **Instagram**: [@adb.epildev](https://www.instagram.com/adb.epildev/)
+- **Discord Server**: [Join Server](https://discord.gg/nvjrfsAQF7)
+- **Telegram**: [@adbepildev](https://t.me/adbepildev)
+- **Facebook**: [AD.Blake.Evan.McBride](https://www.facebook.com/AD.Blake.Evan.McBride/)
 
 ---
 
